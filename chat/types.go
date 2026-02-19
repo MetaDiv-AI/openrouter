@@ -12,16 +12,32 @@ type Message struct {
 }
 
 // ContentPart represents a part of multimodal content.
+// Type can be "text", "image_url", "video_url", "input_audio", or "file".
 type ContentPart struct {
-	Type     string    `json:"type"`
-	Text     string    `json:"text,omitempty"`
-	ImageURL *ImageURL `json:"image_url,omitempty"`
+	Type       string      `json:"type"`
+	Text       string      `json:"text,omitempty"`
+	ImageURL   *ImageURL   `json:"image_url,omitempty"`
+	VideoURL   *ImageURL   `json:"video_url,omitempty"`
+	InputAudio *InputAudio `json:"input_audio,omitempty"`
+	File       *FileData   `json:"file,omitempty"`
 }
 
-// ImageURL represents an image URL for vision.
+// ImageURL represents an image or video URL for vision.
 type ImageURL struct {
 	URL    string `json:"url"`
 	Detail string `json:"detail,omitempty"`
+}
+
+// InputAudio represents audio input for speech-capable models.
+type InputAudio struct {
+	Data   string `json:"data"`
+	Format string `json:"format"`
+}
+
+// FileData represents a document file (PDF, etc.) for OpenRouter.
+type FileData struct {
+	Filename string `json:"filename"`
+	FileData string `json:"fileData"`
 }
 
 // Tool represents a tool/function definition.
@@ -40,10 +56,10 @@ type FunctionDef struct {
 // ToolCall represents a tool call in the response.
 // Index is used when accumulating streaming deltas (OpenAI format).
 type ToolCall struct {
-	Index    int           `json:"index,omitempty"`
-	ID       string        `json:"id"`
-	Type     string        `json:"type"`
-	Function FunctionCall  `json:"function"`
+	Index    int          `json:"index,omitempty"`
+	ID       string       `json:"id"`
+	Type     string       `json:"type"`
+	Function FunctionCall `json:"function"`
 }
 
 // FunctionCall represents a function call in the response.
